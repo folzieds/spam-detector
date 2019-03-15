@@ -120,13 +120,26 @@ from sklearn.naive_bayes import MultinomialNB
 Nb = MultinomialNB()
 Nb.fit(x_train, target_df)
 
+from sklearn.ensemble import RandomForestClassifier
+Rf = RandomForestClassifier(n_estimators = 10, random_state =0)
+Rf.fit(x_train, target_df)
+
+from sklearn.ensemble import AdaBoostClassifier
+AB = AdaBoostClassifier()
+AB.fit(x_train, target_df)
+
 y_pred = Nb.predict(x_test)
+y_predAb = AB.predict(x_test)
+y_predRf = Rf.predict(x_test)
 
 print(f'model score: {Nb.score(x_test,y_pred)}')
+print(f'model score: {AB.score(x_test,y_predAb)}')
+print(f'model score: {Rf.score(x_test,y_predRf)}')
 
 
-# kaggle submission
-Submit = pd.DataFrame(y_pred, columns = ['Prediction'])
+# kaggle submission Adaboost gives a score of 95.8% accuracy
+Submit = pd.DataFrame(y_predAb, columns = ['Prediction'])
+Submit.index.names = ['Id']
 Submit.index += 1 
 
 Submit.to_csv('output.csv')
